@@ -1,0 +1,6 @@
+/* Ensure Tailwind CSS is installed and your build tool is configured to process these directives */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* If you see "Unknown at rule @tailwind", make sure your build tool is running PostCSS with Tailwind CSS plugin. */

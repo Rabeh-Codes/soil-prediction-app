@@ -1,0 +1,21 @@
+# Ignore node_modules to avoid copying heavy dependencies
+node_modules
+
+# Ignore local build output
+dist
+
+# Ignore logs
+*.log
+
+# Ignore environment files
+.env
+
+# Ignore editor and OS-specific files
+.vscode
+.DS_Store
+Thumbs.db
+
+# Ignore test files
+*.test.*
+__tests__/
+coverage/
