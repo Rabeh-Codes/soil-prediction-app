@@ -1,4 +1,4 @@
-# Stage 1: Build the React application
+ # Stage 1: Build the React application
 FROM node:20-alpine AS builder
 
 # Set working directory inside the container
@@ -11,6 +11,7 @@ ENV NODE_ENV=production
 COPY package*.json ./
 
 # Install dependencies with cache to speed up builds (ensure BuildKit enabled)
+ENV HUSKY=0
 RUN --mount=type=cache,target=/root/.npm \
     npm install --legacy-peer-deps
 
