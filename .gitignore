@@ -25,3 +25,5 @@ minikube-linux-amd64
 *.njsproj
 *.sln
 *.sw?
+kubectl
+minikube-linux-amd64
