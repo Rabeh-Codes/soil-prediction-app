@@ -7,10 +7,10 @@ function App() {
     <>
       <div>
         <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-500 to-green-500">
-          <h1 className="text-4xl font-bold text-white shadow-lg">Tailwind is working ✅</h1>
+          <h1 className="text-4xl font-bold text-white shadow-lg">javascript with python✅</h1>
         </div>
       </div>
-      <div className="text-3xl font-bold text-blue-600">hello tailwind</div>
+      <div className="text-3xl font-bold text-blue-600">hello javascriptvhvhjvhjvujvuv</div>
       <h1>Vite + React</h1>
       <div className="card">
         <button onClick={() => setCount(count => count + 1)}>count is {count}</button>

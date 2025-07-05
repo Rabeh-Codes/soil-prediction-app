@@ -1,41 +1,34 @@
- # Stage 1: Build the React application
-FROM node:20-alpine AS builder
+# ---------- Stage 1: Build the app ----------
+FROM node:18-alpine AS builder
 
-# Set working directory inside the container
+# Set working directory
 WORKDIR /app
+# install wget
+RUN apk add --no-cache wget
+# Copy only dependency metadata
+COPY package.json package-lock.json ./
 
-# Set environment variable to production during build
-ENV NODE_ENV=production
+# Install dependencies
+RUN npm install --legacy-peer-deps
 
-# Copy package definition files to leverage Docker cache
-COPY package*.json ./
-
-# Install dependencies with cache to speed up builds (ensure BuildKit enabled)
-ENV HUSKY=0
-RUN --mount=type=cache,target=/root/.npm \
-    npm install --legacy-peer-deps
-
-# Copy the rest of the project files
+# Copy the entire app source
 COPY . .
 
-# Build the app (Vite outputs to dist folder)
+# Build for production
 RUN npm run build
 
-# Stage 2: Serve the built app using Nginx
-FROM nginx:alpine-slim
 
-# Create a non-root user to run Nginx (improves security)
-RUN addgroup -S appgroup && adduser -S appuser -G appgroup
-USER appuser
+# ---------- Stage 2: Serve with Nginx ----------
+FROM nginx:alpine
 
-# Copy built files from the builder stage to Nginx's public directory
+# Clean default nginx files
+RUN rm -rf /usr/share/nginx/html/*
+
+# Copy built static files to Nginx directory
 COPY --from=builder /app/dist /usr/share/nginx/html
 
-# Copy custom Nginx configuration (make sure nginx.conf exists in your project)
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-# Expose port 80 for web traffic
+# Expose HTTP port
 EXPOSE 80
 
-# Run Nginx in the foreground
+# Start Nginx server
 CMD ["nginx", "-g", "daemon off;"]

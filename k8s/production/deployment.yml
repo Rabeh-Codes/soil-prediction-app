@@ -1,0 +1,165 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nasa-soil-prediction-production
+  namespace: soil-prediction-prod
+  labels:
+    app: nasa-soil-prediction
+    env: production
+    tier: frontend
+spec:
+  replicas: 5
+  revisionHistoryLimit: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 25%
+  selector:
+    matchLabels:
+      app: nasa-soil-prediction
+      env: production
+  template:
+    metadata:
+      labels:
+        app: nasa-soil-prediction
+        env: production
+        version: v1.0.0
+      annotations:
+        prometheus.io/scrape: 'true'
+        prometheus.io/port: '8080'
+        prometheus.io/path: '/metrics'
+    spec:
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 2000
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values: ['nasa-soil-prediction']
+              topologyKey: 'kubernetes.io/hostname'
+      containers:
+        - name: web-app
+          image: ghcr.io/nasa/soil-prediction-app:v1.0.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+              name: http
+          env:
+            - name: NODE_ENV
+              value: production
+            - name: API_BASE_URL
+              value: 'https://api.soil-prediction.nasa.gov'
+            - name: SENTRY_DSN
+              valueFrom:
+                secretKeyRef:
+                  name: prod-app-secrets
+                  key: SENTRY_DSN
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: prod-db-secrets
+                  key: DATABASE_URL
+          securityContext:
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ['ALL']
+          resources:
+            limits:
+              cpu: '2'
+              memory: '1Gi'
+            requests:
+              cpu: '500m'
+              memory: '512Mi'
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+              scheme: HTTPS
+            initialDelaySeconds: 10
+            periodSeconds: 15
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+              scheme: HTTPS
+            initialDelaySeconds: 30
+            periodSeconds: 30
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 3
+          startupProbe:
+            httpGet:
+              path: /health
+              port: 8080
+              scheme: HTTPS
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 10
+          volumeMounts:
+            - name: tmp-volume
+              mountPath: /tmp
+      volumes:
+        - name: tmp-volume
+          emptyDir:
+            medium: Memory
+            sizeLimit: 100Mi
+      imagePullSecrets:
+        - name: ghcr-secret
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: soil-prediction-hpa
+  namespace: soil-prediction-prod
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: nasa-soil-prediction-production
+  minReplicas: 3
+  maxReplicas: 20
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 80
+    - type: Pods
+      pods:
+        metric:
+          name: http_requests
+        target:
+          type: AverageValue
+          averageValue: 500
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: soil-prediction-pdb
+  namespace: soil-prediction-prod
+spec:
+  minAvailable: 60%
+  selector:
+    matchLabels:
+      app: nasa-soil-prediction
+      env: production
