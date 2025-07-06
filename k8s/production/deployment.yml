@@ -46,7 +46,7 @@ spec:
               topologyKey: 'kubernetes.io/hostname'
       containers:
         - name: web-app
-          image: ghcr.io/nasa/soil-prediction-app:v1.0.0
+          image: ghcr.io/rabeh-codes/soil-prediction-app-soil-app:latest
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
@@ -61,11 +61,7 @@ spec:
                 secretKeyRef:
                   name: prod-app-secrets
                   key: SENTRY_DSN
-            - name: DATABASE_URL
-              valueFrom:
-                secretKeyRef:
-                  name: prod-db-secrets
-                  key: DATABASE_URL
+
           securityContext:
             readOnlyRootFilesystem: true
             allowPrivilegeEscalation: false

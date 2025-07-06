@@ -1,0 +1,94 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: soil-prediction-ingress
+  namespace: soil-prediction-prod
+  annotations:
+    # Security headers
+    nginx.ingress.kubernetes.io/add-headers: |
+      Strict-Transport-Security: "max-age=31536000; includeSubDomains; preload"
+      Content-Security-Policy: "default-src 'self'; script-src 'self' 'unsafe-inline' *.nasa.gov; style-src 'self' 'unsafe-inline'; img-src 'self' data: *.nasa.gov"
+      X-Content-Type-Options: "nosniff"
+      X-Frame-Options: "DENY"
+      X-XSS-Protection: "1; mode=block"
+      Referrer-Policy: "strict-origin-when-cross-origin"
+    
+    # Security enhancements
+    nginx.ingress.kubernetes.io/enable-global-auth: "true"
+    nginx.ingress.kubernetes.io/enable-cors: "false"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"  # Always redirect to HTTPS in production
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    
+    # Performance and reliability
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "10"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "30"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "30"
+    nginx.ingress.kubernetes.io/proxy-body-size: "20m"
+    nginx.ingress.kubernetes.io/proxy-buffer-size: "16k"
+    nginx.ingress.kubernetes.io/limit-rpm: "1000"
+    nginx.ingress.kubernetes.io/limit-rps: "100"
+    
+    # NASA-specific monitoring
+    nginx.ingress.kubernetes.io/enable-access-log: "true"
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      access_log /var/log/nginx/access.log upstreaminfo;
+      error_log  /var/log/nginx/error.log;
+    
+    # TLS configuration
+    nginx.ingress.kubernetes.io/ssl-ciphers: "ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384"
+    nginx.ingress.kubernetes.io/ssl-protocols: "TLSv1.2 TLSv1.3"
+    nginx.ingress.kubernetes.io/ssl-prefer-server-ciphers: "true"
+    
+    # DDoS protection
+    nginx.ingress.kubernetes.io/limit-connections: "100"
+    nginx.ingress.kubernetes.io/denylist-source-range: "192.168.0.0/16,10.0.0.0/8"  # Block internal IPs
+
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - soil-prediction.nasa.gov
+        - www.soil-prediction.nasa.gov
+      secretName: nasa-tls-certificate  # NASA-managed TLS certificate
+  
+  rules:
+    - host: soil-prediction.nasa.gov
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: soil-prediction-service
+                port:
+                  number: 8080
+          
+          # Health check endpoint
+          - path: /healthz
+            pathType: Exact
+            backend:
+              service:
+                name: soil-prediction-service
+                port:
+                  number: 8080
+    
+    # Redirect www to non-www
+    - host: www.soil-prediction.nasa.gov
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: soil-prediction-service
+                port:
+                  number: 8080
+            path: /  # Will be handled by the rewrite rule below
+  
+  # Global redirect configuration
+  defaultBackend:
+    service:
+      name: soil-prediction-service
+      port:
+        number: 8080
