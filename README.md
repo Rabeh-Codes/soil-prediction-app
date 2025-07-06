@@ -88,20 +88,7 @@ PRODUCTION_KUBECONFIG: Kubeconfig file for the production environment.
 
 These should be added to GitHub Actions secrets by the deployment administrator.
 
-🧠 Project Structure
-bash
-Copy
-Edit
-.
-├── src/                   # React source code
-├── public/                # Static assets
-├── k8s/
-│   ├── production/        # Deployment files for production
-│   └── staging/           # Deployment files for staging
-├── tests/performance/     # Load testing via Locust
-├── .github/workflows/     # CI/CD pipeline
-├── Dockerfile             # Docker build file
-└── README.md
+
 📄 License
 © 2025 NASA Soil Prediction Project. All rights reserved.
 
