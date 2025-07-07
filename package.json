@@ -17,7 +17,8 @@
     "prepare": "if [ \"$HUSKY\" != \"0\" ]; then npx husky install; fi",
     "test": "vitest",
     "test:run": "vitest run",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "test:ci": "vitest run --coverage"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
