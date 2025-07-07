@@ -68,6 +68,7 @@ const LoadingSpinner = ({
 
   return (
     <div
+      data-testid="loading-spinner"
       className={containerClass}
       aria-label={text ? `Loading: ${text}` : 'Loading'}
       role="status"

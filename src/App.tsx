@@ -9,17 +9,16 @@ import LoadingSpinner from './components/LoadingSpinner';
 import ErrorFallback from './components/ErrorFallback';
 import AppRoutes from './routes/AppRoutes';
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: 1,
-      refetchOnWindowFocus: false,
-      staleTime: 5 * 60 * 1000,
-    },
-  },
-});
-
 function App() {
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        retry: 1,
+        refetchOnWindowFocus: false,
+        staleTime: 5 * 60 * 1000,
+      },
+    },
+  });
   return (
     <HelmetProvider>
       <QueryClientProvider client={queryClient}>

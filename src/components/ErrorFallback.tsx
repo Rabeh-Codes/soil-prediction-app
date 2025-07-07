@@ -56,6 +56,7 @@ const ErrorFallback = ({ error, resetErrorBoundary }: FallbackProps) => {
 
   return (
     <div
+      data-testid="error-fallback"
       className="flex min-h-screen flex-col items-center justify-center bg-gray-50 p-4 font-sans text-gray-900 dark:bg-gray-900 dark:text-gray-100"
       role="alert"
       aria-live="assertive"

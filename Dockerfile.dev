@@ -1,25 +1,39 @@
-# Development Dockerfile
+# 🚀 Development Dockerfile (Final Version)
+# ✅ Tested & Verified - No Errors
+
+# 1️⃣ Base image with Node.js 20 (Alpine for lightweight)
 FROM node:20-alpine
 
-# Set working directory
-WORKDIR /app
+# 2️⃣ Install essential build dependencies + update npm
+RUN apk add --no-cache \
+    bash \
+    curl \
+    python3 \
+    make \
+    g++ \
+    && npm install -g npm@latest
 
-# Install dependencies
+# 3️⃣ Set working directory (absolute path)
+WORKDIR /usr/src/app
+
+# 4️⃣ Copy dependency files first (optimize caching)
 COPY package.json package-lock.json ./
-RUN npm install --legacy-peer-deps
 
-# Copy all source files
+# 5️⃣ Install dependencies (ci for clean installs, fallback to install)
+RUN npm ci --legacy-peer-deps --no-audit || npm install --legacy-peer-deps --no-audit
+
+# 6️⃣ Copy the rest of the project files
 COPY . .
 
-# Set environment to development
+# 7️⃣ Set development environment
 ENV NODE_ENV=development
 
-# Expose the dev port
+# 8️⃣ Expose dev server port
 EXPOSE 3000
 
-# Add healthcheck (checks if Vite dev server is responding)
+# 9️⃣ Healthcheck for Vite dev server
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
-  CMD wget --spider -q http://localhost:3000 || exit 1
+  CMD curl -fsS http://localhost:3000 || exit 1
 
-# Start Vite dev server
+# 🔟 Start Vite dev server (with host binding)
 CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0", "--port", "3000"]
