@@ -57,6 +57,8 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.29.0",
+    "@sentry/react": "^9.35.0",
+    "@sentry/tracing": "^7.120.3",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
@@ -85,6 +87,8 @@
     "postcss-scss": "^4.0.9",
     "prettier": "^3.6.2",
     "prettier-plugin-tailwindcss": "^0.6.13",
+    "rollup-plugin-visualizer": "^6.0.3",
+    "state.js": "^5.11.1",
     "stylelint": "^16.21.1",
     "stylelint-config-recommended": "^16.0.0",
     "stylelint-config-standard": "^38.0.0",
@@ -97,7 +101,10 @@
     "tailwindcss": "^3.4.17",
     "typescript": "~5.8.3",
     "vite": "^5.0.1",
-    "vitest": "^3.2.4"
+    "vite-plugin-inspect": "^11.3.0",
+    "vitest": "^3.2.4",
+    "web-vitals": "^5.0.3",
+    "why-did-you-render": "^1.0.1"
   },
   "overrides": {
     "react-helmet-async": {
