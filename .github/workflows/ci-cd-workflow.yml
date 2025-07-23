@@ -132,6 +132,7 @@ jobs:
           images: |
             ${{ env.REGISTRY_GHCR }}/${{ github.repository }}:${{ github.sha }}
           strategy: rolling
+        env:
           kubeconfig: ${{ secrets.STAGING_KUBECONFIG }}  # Added kubeconfig
 
       - name: Verify Deployment
@@ -168,6 +169,7 @@ jobs:
           images: |
             ${{ env.REGISTRY_GHCR }}/${{ github.repository }}:${{ steps.semver.outputs.version }}
           strategy: rolling
+        env:
           kubeconfig: ${{ secrets.PRODUCTION_KUBECONFIG }}  # Added kubeconfig
 
       - name: Verify Deployment
