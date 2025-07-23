@@ -7,14 +7,15 @@ metadata:
     app: nasa-soil-prediction
     env: production
     tier: frontend
+    team: soil-science
 spec:
   replicas: 5
-  revisionHistoryLimit: 3
+  revisionHistoryLimit: 5
   strategy:
     type: RollingUpdate
     rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 25%
+      maxSurge: 25%
+      maxUnavailable: 15%
   selector:
     matchLabels:
       app: nasa-soil-prediction
@@ -24,97 +25,175 @@ spec:
       labels:
         app: nasa-soil-prediction
         env: production
-        version: v1.0.0
+        version: "v1.0.0"
       annotations:
-        prometheus.io/scrape: 'true'
-        prometheus.io/port: '8080'
-        prometheus.io/path: '/metrics'
+       
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+        prometheus.io/path: "/metrics"
+
+        securityscan.io/enabled: "true"
+        securityscan.io/type: "trivy"
     spec:
       automountServiceAccountToken: false
       securityContext:
         runAsNonRoot: true
         runAsUser: 1000
-        fsGroup: 2000
+        runAsGroup: 3000
+        fsGroup: 3000
+        seccompProfile:
+          type: RuntimeDefault
+      nodeSelector:
+        workload: frontend
+      tolerations:
+        - key: "dedicated"
+          operator: "Equal"
+          value: "frontend"
+          effect: "NoSchedule"
       affinity:
         podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            - labelSelector:
-                matchExpressions:
-                  - key: app
-                    operator: In
-                    values: ['nasa-soil-prediction']
-              topologyKey: 'kubernetes.io/hostname'
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app
+                      operator: In
+                      values: ["nasa-soil-prediction"]
+                topologyKey: "kubernetes.io/hostname"
       containers:
         - name: web-app
-          image: ghcr.io/rabeh-codes/soil-prediction-app-soil-app:latest
+          image: ghcr.io/rabeh-codes/soil-prediction-app:v1.0.0
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
               name: http
+              protocol: TCP
           env:
             - name: NODE_ENV
               value: production
             - name: API_BASE_URL
-              value: 'https://api.soil-prediction.nasa.gov'
+              value: "https://api.soil-prediction.nasa.gov"
             - name: SENTRY_DSN
               valueFrom:
                 secretKeyRef:
                   name: prod-app-secrets
                   key: SENTRY_DSN
-
+            - name: PORT
+              value: "8080"
           securityContext:
             readOnlyRootFilesystem: true
             allowPrivilegeEscalation: false
             capabilities:
-              drop: ['ALL']
+              drop: ["ALL"]
+            privileged: false
           resources:
             limits:
-              cpu: '2'
-              memory: '1Gi'
+              cpu: "1.5"
+              memory: "1.2Gi"
             requests:
-              cpu: '500m'
-              memory: '512Mi'
+              cpu: "300m"
+              memory: "512Mi"
           readinessProbe:
             httpGet:
               path: /health
               port: 8080
-              scheme: HTTPS
-            initialDelaySeconds: 10
-            periodSeconds: 15
-            timeoutSeconds: 5
+              scheme: HTTP
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 3
             successThreshold: 1
             failureThreshold: 3
           livenessProbe:
             httpGet:
               path: /health
               port: 8080
-              scheme: HTTPS
+              scheme: HTTP
             initialDelaySeconds: 30
-            periodSeconds: 30
-            timeoutSeconds: 5
+            periodSeconds: 15
+            timeoutSeconds: 3
             successThreshold: 1
             failureThreshold: 3
           startupProbe:
             httpGet:
               path: /health
               port: 8080
-              scheme: HTTPS
-            initialDelaySeconds: 15
+              scheme: HTTP
+            initialDelaySeconds: 20
             periodSeconds: 10
-            timeoutSeconds: 5
+            timeoutSeconds: 3
             successThreshold: 1
             failureThreshold: 10
           volumeMounts:
             - name: tmp-volume
               mountPath: /tmp
+            - name: config-volume
+              mountPath: /app/config
+              readOnly: true
       volumes:
         - name: tmp-volume
           emptyDir:
             medium: Memory
             sizeLimit: 100Mi
+        - name: config-volume
+          configMap:
+            name: app-config
       imagePullSecrets:
         - name: ghcr-secret
+
 ---
+
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: soil-prediction-network-policy
+  namespace: soil-prediction-prod
+spec:
+  podSelector:
+    matchLabels:
+      app: nasa-soil-prediction
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: ingress-nginx
+        - podSelector:
+            matchLabels:
+              app: ingress-nginx
+      ports:
+        - port: 8080
+          protocol: TCP
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: soil-api
+        - podSelector:
+            matchLabels:
+              app: soil-api
+      ports:
+        - port: 8080
+          protocol: TCP
+
+---
+
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: soil-prediction-pdb
+  namespace: soil-prediction-prod
+spec:
+  minAvailable: 70%
+  selector:
+    matchLabels:
+      app: nasa-soil-prediction
+      env: production
+
+---
+
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
@@ -125,37 +204,70 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: nasa-soil-prediction-production
-  minReplicas: 3
-  maxReplicas: 20
+  minReplicas: 5
+  maxReplicas: 30
   metrics:
     - type: Resource
       resource:
         name: cpu
         target:
           type: Utilization
-          averageUtilization: 70
+          averageUtilization: 75
     - type: Resource
       resource:
         name: memory
         target:
           type: Utilization
-          averageUtilization: 80
+          averageUtilization: 85
     - type: Pods
       pods:
         metric:
-          name: http_requests
+          name: http_requests_per_second
         target:
           type: AverageValue
-          averageValue: 500
+          averageValue: 1000
+    - type: Object
+      object:
+        metric:
+          name: latency_p95
+        describedObject:
+          apiVersion: networking.k8s.io/v1
+          kind: Ingress
+          name: soil-prediction-ingress
+        target:
+          type: Value
+          value: 200ms
+
 ---
-apiVersion: policy/v1
-kind: PodDisruptionBudget
+
+apiVersion: v1
+kind: ConfigMap
 metadata:
-  name: soil-prediction-pdb
+  name: app-config
   namespace: soil-prediction-prod
+data:
+  app-config.yaml: |
+    features:
+      caching: true
+      analytics: false
+    logging:
+      level: warn
+      format: json
+
+
+
+apiVersion: velero.io/v1
+kind: Schedule
+metadata:
+  name: soil-prediction-backup
+  namespace: velero
 spec:
-  minAvailable: 60%
-  selector:
-    matchLabels:
-      app: nasa-soil-prediction
-      env: production
+  schedule: '@every 24h'
+  template:
+    includedNamespaces:
+      - soil-prediction-prod
+    storageLocation: aws-s3-backup
+    ttl: 720h
+    snapshotVolumes: true
+    volumeSnapshotLocations:
+      - aws-default

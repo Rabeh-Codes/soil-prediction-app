@@ -1,32 +1,80 @@
 {
   "compilerOptions": {
-    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+    "typeRoots": ["./node_modules/@types", "./src/types"],
+    "types": ["vite/client", "node"],
     "target": "ES2022",
-    "useDefineForClassFields": true,
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "module": "ESNext",
-    "skipLibCheck": true,
-    "types": ["vitest/globals"],
-    /* Bundler mode */
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "verbatimModuleSyntax": true,
-    "moduleDetection": "force",
-    "noEmit": true,
-    "jsx": "react-jsx",
-
+    "moduleResolution": "node",
     "baseUrl": "./",
+    
     "paths": {
-      "@/*": ["src/*"]
-    },
-
-    /* Linting */
-    "strict": true,
+  "@/*": ["src/*"],
+  "@components/*": ["src/components/*"],
+  "@pages/*": ["src/pages/*"],
+  "@layouts/*": ["src/layouts/*"],
+  "@hooks/*": ["src/hooks/*"],
+  "@services/*": ["src/services/*"],
+  "@utils/*": ["src/utils/*"],
+  "@assets/*": ["src/assets/*"],
+  "@styles/*": ["src/styles/*"],
+  "@types/*": ["src/types/*"],
+  "@routes/*": ["src/routes/*"]
+},
+    "jsx": "react-jsx",
+"strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "erasableSyntaxOnly": true,
+    "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true
+    "noImplicitOverride": true,
+    "noImplicitAny": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "composite": true,
+    "isolatedModules": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "incremental": true,
+    "esModuleInterop": true,
+    "strictNullChecks": true,
+
+   
+    
+
+    "resolveJsonModule": true,
+    "verbatimModuleSyntax": true,
+
+    
+    
   },
-  "include": ["src"]
+  "include": [
+    "src",
+    "src/types",
+    "**/*.d.ts",
+    "vite.config.ts",
+    "vitest.config.ts",
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "tests/**/*.spec.ts",
+    "tests/**/*.test.ts",
+    "**/*.d.ts",
+    "vite-env.d.ts" 
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "build",
+    "docker",
+    "**/__mocks__/*",
+    "**/coverage/*",
+    "**/.gitignore",
+    "**/Dockerfile*",
+    "**/docker-compose*",
+    "**/Makefile"
+  ],
+  "references": [
+    { "path": "./tsconfig.node.json" }
+  ]
 }

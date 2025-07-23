@@ -1,0 +1,68 @@
+# ----- Node.js artifacts -----
+**/node_modules
+**/dist
+**/build
+**/.npm
+**/.pnpm
+**/.cache
+**/coverage
+**/*.log
+
+# ----- Environment files -----
+.env
+.env.*.local
+.env.development
+.env.production
+.env.test
+.env.docker
+
+# ----- Test artifacts -----
+**/__tests__
+**/__snapshots__
+**/*.test.*
+**/*.spec.*
+**/jest.config.*
+**/vitest.config.*
+**/test-results
+
+# ----- Build artifacts -----
+**/.dockerignore
+**/Dockerfile*
+**/docker-compose*
+**/Makefile
+**/nginx.conf
+
+# ----- Source control -----
+.git
+.gitignore
+.gitattributes
+.gitmodules
+
+# ----- Editor/IDE files -----
+.vscode
+.idea
+*.sw?
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# ----- OS junk files -----
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ----- Documentation -----
+**/*.md
+**/LICENSE
+**/CHANGELOG
+
+# ----- Special cases -----
+# Ignore all hidden files except .dockerignore
+.*
+!.dockerignore
+
+# Keep public assets (optional)
+!public
+error_scanner.py
+nasa_analyzer.py

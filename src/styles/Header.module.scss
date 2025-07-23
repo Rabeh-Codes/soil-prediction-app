@@ -1,0 +1,209 @@
+
+.header {
+  background-color: #0077ff;
+  padding: 0 0;
+  color: #fff;
+  font-family: 'Segoe UI', Roboto, sans-serif;
+  top: 0;
+  position: sticky;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  
+}
+
+.inner {
+  
+  margin: 0 auto;
+  background-color: #003087;
+  color: #000;
+  padding: 0.11rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.accessDropdownWrapper{
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  padding-top: 1rem;
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+}
+.logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  gap: 0.5rem;
+  flex-direction: row;
+}
+
+.logoImage {
+  height: 36px;
+  width: auto;
+}
+.logoText{
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  align-items: baseline;
+}
+.logoTitle {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #000;
+}
+
+.logoSubtitle {
+  margin: 0;
+  font-size: 0.75rem;
+  color: #555;
+}
+
+.nav {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+.accessDrop
+.navItemWrapper {
+  position: relative;
+}
+
+.navItem {
+  font-size: 0.9375rem;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  transition: transform 0.2s ease;
+}
+
+.navItem:hover,
+.active {
+  color: #0077ff;
+  
+}
+
+.arrow {
+  font-size: 0.75rem;
+}
+
+.dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 0.5rem;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 0.375rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  min-width: 160px;
+}
+
+.dropdownItem {
+  padding: 0.5rem 1rem;
+  display: block;
+  color: #333;
+  text-decoration: none;
+  font-size: 0.875rem;
+}
+
+.dropdownItem:hover {
+  background-color: #f4f4f4;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.searchForm {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.searchInput {
+  padding: 0.375rem 0.5rem;
+  font-size: 0.875rem;
+  border: 1px solid #ccc;
+  border-radius: 0.375rem;
+  width: 180px;
+}
+
+.searchButton {
+  padding: 0.375rem 0.75rem;
+  font-size: 0.875rem;
+  border: none;
+  background-color: #0077ff;
+  color: #fff;
+  border-radius: 0.375rem;
+  cursor: pointer;
+}
+
+.searchButton:hover {
+  background-color: #005ec2;
+}
+
+.mobileSearchToggle {
+  display: none;
+}
+
+.menuButton {
+  font-size: 1.25rem;
+  background: none;
+  border: none;
+  color: #333;
+  cursor: pointer;
+}
+
+.mobileSearch {
+  padding: 0.5rem 1rem;
+  background: #f9f9f9;
+}
+
+.mobileSearchSubmit {
+  margin-left: 0.5rem;
+  background-color: #0077ff;
+  border: none;
+  color: white;
+  padding: 0.375rem 0.75rem;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.mobileSearchSubmit:hover {
+  background-color: #005ec2;
+}
+
+@media (max-width: 768px) {
+  .inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .nav {
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 100%;
+  }
+  .actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .mobileSearchToggle {
+    display: inline-block;
+  }
+  .searchForm {
+    display: none;
+  }
+}

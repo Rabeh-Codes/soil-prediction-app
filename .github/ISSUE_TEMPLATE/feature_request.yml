@@ -1,0 +1,254 @@
+name: "Feature Request"
+description: "Propose a new feature or enhancement for the application"
+title: "[FEATURE] "
+labels: ["enhancement", "needs-review"]
+assignees:
+  - "product-manager"
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ✨ **Thank you for suggesting an improvement!**
+        Please provide detailed information to help us understand and evaluate your feature proposal.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: "Feature Summary"
+      description: "Briefly describe the feature you're requesting"
+      placeholder: "A clear and concise description of the feature..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: "Problem & Motivation"
+      description: "What problem does this solve? Why is this feature valuable?"
+      placeholder: |
+        - Describe the current limitation or user pain point
+        - Explain who will benefit from this feature
+        - Quantify benefits if possible (time saved, efficiency gain, new capabilities)
+      render: markdown
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: "Proposed Solution"
+      description: "How should this feature work? Be as specific as possible"
+      placeholder: |
+        - Describe the ideal implementation
+        - Outline key functionality
+        - Suggest UI/UX approaches
+        - Specify technical considerations
+      render: markdown
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: "Alternatives Considered"
+      description: "What other approaches could solve this problem?"
+      placeholder: |
+        - Option A: [Description]
+        - Option B: [Description]
+        - Why the proposed solution is superior
+      render: markdown
+
+  - type: textarea
+    id: mockups
+    attributes:
+      label: "Mockups & Designs"
+      description: "Add links to any mockups, wireframes, or design concepts"
+      placeholder: "Drag & drop images or paste links here"
+      render: markdown
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: "Business Priority"
+      description: "How critical is this feature for your workflow?"
+      options:
+        - "🚀 Critical (Enables core functionality)"
+        - "🔥 High (Significantly improves efficiency)"
+        - "⭐ Medium (Important enhancement)"
+        - "💡 Low (Quality-of-life improvement)"
+      multiple: false
+    validations:
+      required: true
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: "Related Component"
+      description: "Which part of the application does this affect?"
+      options:
+        - "🌍 Map Visualization"
+        - "📊 Data Analysis"
+        - "📈 Graphing Tools"
+        - "🔍 Single Point Analysis"
+        - "🌐 Regional Analysis"
+        - "📦 Data Services"
+        - "🔌 API"
+        - "📖 Documentation"
+        - "🧩 Core Architecture"
+        - "⚡ Performance"
+        - "🔒 Security"
+        - "🧪 Other"
+      multiple: false
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        ### Technical Specifications
+
+  - type: textarea
+    id: requirements
+    attributes:
+      label: "Functional Requirements"
+      description: "List specific capabilities the feature must have"
+      placeholder: |
+        - Must support X functionality
+        - Should integrate with Y system
+        - Needs to handle Z data format
+      render: markdown
+
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: "Dependencies"
+      description: "Are there any technical dependencies for this feature?"
+      placeholder: "Third-party libraries, API changes, data requirements..."
+      render: markdown
+
+  - type: textarea
+    id: security
+    attributes:
+      label: "Security Considerations"
+      description: "Does this feature introduce new security aspects?"
+      placeholder: "Authentication requirements, data sensitivity, permissions..."
+
+  - type: textarea
+    id: performance
+    attributes:
+      label: "Performance Impact"
+      description: "How might this affect application performance?"
+      placeholder: "Potential bottlenecks, optimization needs, scalability..."
+
+  - type: markdown
+    attributes:
+      value: |
+        ### User Experience
+
+  - type: textarea
+    id: users
+    attributes:
+      label: "Target Users"
+      description: "Who will primarily use this feature?"
+      placeholder: "Data scientists, GIS analysts, API consumers, etc."
+
+  - type: textarea
+    id: workflow
+    attributes:
+      label: "User Workflow"
+      description: "How will users interact with this feature?"
+      placeholder: "Step-by-step description of the user journey..."
+      render: markdown
+
+  - type: textarea
+    id: adoption
+    attributes:
+      label: "Adoption Strategy"
+      description: "How should we introduce this feature to users?"
+      placeholder: "Tutorials, documentation, in-app guidance..."
+
+  - type: markdown
+    attributes:
+      value: |
+        ### Release Planning
+
+  - type: dropdown
+    id: rollout
+    attributes:
+      label: "Rollout Approach"
+      description: "How should this feature be released?"
+      options:
+        - "🚪 Feature Flag (Controlled rollout)"
+        - "🧪 Beta Release (Early access)"
+        - "🔄 Phased Rollout (Gradual enablement)"
+        - "🎯 Full Release (All users at once)"
+      multiple: false
+
+  - type: textarea
+    id: metrics
+    attributes:
+      label: "Success Metrics"
+      description: "How will we measure the success of this feature?"
+      placeholder: |
+        - Key Performance Indicators (KPIs)
+        - Usage metrics
+        - User satisfaction targets
+
+  - type: markdown
+    attributes:
+      value: |
+        ### Additional Context
+
+  - type: textarea
+    id: references
+    attributes:
+      label: "Similar Features"
+      description: "Examples from other applications we should consider"
+      placeholder: "Links to implementations in similar products..."
+
+  - type: textarea
+    id: links
+    attributes:
+      label: "Related Resources"
+      description: "Documents, research, or discussions relevant to this feature"
+      placeholder: "Links to RFCs, research papers, or internal documents..."
+
+  - type: markdown
+    attributes:
+      value: |
+        ### Contribution Opportunity
+        (Optional - for those willing to help implement)
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: "Contribution Options"
+      options:
+        - label: "I can provide technical specifications"
+        - label: "I can help with UI/UX design"
+        - label: "I can implement this feature"
+        - label: "I can write documentation"
+        - label: "I can test the implementation"
+        - label: "I can provide domain expertise"
+
+  - type: input
+    id: contact
+    attributes:
+      label: "Contact Information"
+      description: "How can we reach you for follow-up? (Optional)"
+      placeholder: "Email, GitHub handle, Slack ID"
+
+  - type: markdown
+    attributes:
+      value: |
+        ### Checklist
+        - [ ] I've searched existing features and didn't find a solution
+        - [ ] I've provided all necessary information
+        - [ ] This feature aligns with the product vision
+        - [ ] I've considered potential drawbacks
+        - [ ] I'm willing to help implement (optional)
+
+  - type: markdown
+    attributes:
+      value: |
+        🙏 Thank you for your feature request! Our product team will review this suggestion.

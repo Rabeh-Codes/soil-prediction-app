@@ -1,5 +1,5 @@
-import { Suspense } from 'react';
-import { BrowserRouter } from 'react-router-dom';
+import { Suspense, useMemo } from 'react';
+import { MapProvider } from '@/components/map/MapContext';
 import { HelmetProvider } from 'react-helmet-async';
 import { ErrorBoundary } from 'react-error-boundary';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -10,7 +10,7 @@ import ErrorFallback from './components/ErrorFallback';
 import AppRoutes from './routes/AppRoutes';
 
 function App() {
-  const queryClient = new QueryClient({
+  const queryClient = useMemo(() => new QueryClient({
     defaultOptions: {
       queries: {
         retry: 1,
@@ -18,23 +18,27 @@ function App() {
         staleTime: 5 * 60 * 1000,
       },
     },
-  });
+  }), []);
+
   return (
     <HelmetProvider>
       <QueryClientProvider client={queryClient}>
-        <ThemeProvider>
-          <BrowserRouter>
-            <ErrorBoundary
-              FallbackComponent={ErrorFallback}
-              onReset={() => window.location.reload()}
-            >
-              <Suspense fallback={<LoadingSpinner />}>
+        <ErrorBoundary 
+          FallbackComponent={ErrorFallback}
+          onReset={() => window.location.reload()}
+        >
+          <ThemeProvider>
+            <MapProvider>
+              <Suspense fallback={<LoadingSpinner fullScreen />}>
                 <AppRoutes />
               </Suspense>
-            </ErrorBoundary>
-          </BrowserRouter>
-          {import.meta.env.DEV && <ReactQueryDevtools initialIsOpen={false} />}
-        </ThemeProvider>
+
+              {import.meta.env.DEV && (
+                <ReactQueryDevtools initialIsOpen={false} />
+              )}
+            </MapProvider>
+          </ThemeProvider>
+        </ErrorBoundary>
       </QueryClientProvider>
     </HelmetProvider>
   );

@@ -1,0 +1,49 @@
+# docker/Dockerfile.dev
+
+FROM node:20-alpine
+
+# 1. Install essential development tools
+RUN apk add --no-cache \
+  bash \
+  curl \
+  python3 \
+  make \
+  g++ \
+  git \
+  && npm install -g npm@8
+
+# 2. Set working directory
+WORKDIR /usr/src/app
+
+# 3. Copy dependency files
+COPY package*.json ./
+
+# 4. Install project dependencies and tools
+RUN npm install --legacy-peer-deps --no-audit --prefer-offline \
+  && npm install -D chokidar@^3.5.3 concurrently sass sass-embedded typed-scss-modules --legacy-peer-deps
+
+# 5. Add local node_modules binaries to PATH
+ENV PATH=/usr/src/app/node_modules/.bin:$PATH
+
+# 6. Copy full project source
+COPY . .
+COPY start.sh ./start.sh
+RUN chmod +x ./start.sh
+
+# 7. Set permissions to avoid EACCES errors
+RUN chown -R node:node /usr/src/app/start.sh /usr/src/app/src /usr/src/app/public \
+  && mkdir -p /usr/src/app/node_modules/.vite/deps \
+  && chmod -R 777 /usr/src/app/node_modules/.vite
+
+USER node
+
+# 8. Development environment variables
+ENV NODE_ENV=development
+ENV CHOKIDAR_USEPOLLING=true
+ENV VITE_ENABLE_HMR=true
+
+# 9. Expose development port
+EXPOSE 3000
+
+# 10. Start the dev server
+CMD ["./start.sh"]

@@ -1,0 +1,61 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "daily"
+      time: "04:00"
+      timezone: "UTC"
+    open-pull-requests-limit: 10
+    reviewers: ["dev-lead"]
+    assignees: ["frontend-team"]
+    labels: ["dependencies", "javascript"]
+    commit-message:
+      prefix: "chore(deps)"
+      prefix-development: "chore(dev-deps)"
+    groups:
+      core-ui:
+        patterns: ["react*", "vite*"]
+      testing:
+        patterns: ["vitest*", "@testing-library/*"]
+      linting:
+        patterns: ["eslint*", "prettier*", "@typescript-eslint/*"]
+    ignore:
+     
+      - dependency-name: "@nasa-api/*"
+      - dependency-name: "axios"
+        versions: ["2.x"] 
+      - dependency-name: "react"
+        versions: ["18.x"] 
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      time: "05:00"
+      timezone: "UTC"
+    open-pull-requests-limit: 5
+    labels: ["dependencies", "github-actions"]
+    commit-message:
+      prefix: "chore(gha)"
+    ignore:
+      - dependency-name: "actions/checkout"
+        versions: ["v3"]
+
+  
+  security-updates:
+    enable: true
+    version-updates: 
+      package-ecosystem: "npm"
+      directory: "/"
+      schedule:
+        interval: "daily"
+      ignore:
+        - dependency-name: "jsonwebtoken"
+        - dependency-name: "axios"
+          
+
+  vulnerability-alerts:
+    enabled: true
+    labels: ["security", "nasa-api"]
+    assignees: ["security-team"]

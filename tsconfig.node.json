@@ -1,25 +1,65 @@
 {
+  "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
-    "target": "ES2023",
-    "lib": ["ES2023"],
-    "module": "ESNext",
-    "skipLibCheck": true,
-
-    /* Bundler mode */
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "verbatimModuleSyntax": true,
-    "moduleDetection": "force",
-    "noEmit": true,
-
-    /* Linting */
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "erasableSyntaxOnly": true,
-    "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true
+    // ===== NODE-SPECIFIC SETTINGS =====
+    "module": "ESNext",                 
+    "target": "ES2022",                   // Node 20 supports ES2022 features
+    "moduleResolution": "node",           // Standard Node.js resolution
+    "composite": true,
+    // ===== OUTPUT CONTROL =====
+    "outDir": "./dist-server",            // Separate output directory
+    "rootDir": "./server",                // Source directory for server code
+    "declaration": true,                  // Generate .d.ts files for types
+    "declarationMap": true,               // Generate source maps for declarations
+    "sourceMap": true,                    // Generate source maps for debugging
+    
+    // ===== TYPE CHECKS =====
+    "types": ["node"],                    // Node.js type definitions
+    "skipLibCheck": false,                // Check lib files for server code
+    "strict": true,                       // Maintain strict type checking
+    "noImplicitAny": true,                // Disallow implicit any types
+    "strictNullChecks": true,             // Enable strict null checks
+    
+    // ===== INTEROPERABILITY =====
+    "esModuleInterop": true,              // Enable ESM/CJS interoperability
+    "allowSyntheticDefaultImports": true, // Allow default imports from CJS
+    
+    // ===== DEBUGGING & PRODUCTION =====
+    "inlineSourceMap": false,             // Better for production
+    "removeComments": false,              // Keep comments in output
+    "incremental": true,                  // Enable incremental builds
+    "tsBuildInfoFile": "./.tsbuildinfo",  // Build cache location
+    
+    // ===== NASA PROJECT-SPECIFIC =====
+    "resolveJsonModule": true             // Essential for config files
   },
-  "include": ["vite.config.ts"]
+  
+  // ===== INCLUSIONS =====
+  "include": [
+    "server/**/*.ts",                     // Server source files
+    "scripts/**/*.ts",                    // Build/utility scripts
+    "docker/**/*.ts",                     // Docker-related scripts
+    "ci/**/*.ts",                         // CI/CD scripts
+    "config/**/*.ts",                     // Configuration files
+    "**/*.d.ts",                           // Type declarations
+     "vite.config.ts", "vitest.config.ts"                                     
+  ],
+  
+  // ===== EXCLUSIONS =====
+  "exclude": [
+    "**/node_modules/**",
+    "src",                                // Frontend code
+    "public",                             // Static assets
+    "tests",                              // Frontend tests
+    "**/*.test.ts",                       // Test files
+    "**/*.spec.ts",                       // Alternative test pattern
+    "**/__mocks__/**",                    // Mock directories
+    "vite.config.ts",                     // Frontend config
+    "vitest.config.ts"                    // Test runner config
+  ],
+  
+  // ===== COMPILER OPTIMIZATIONS =====
+  "references": [
+    { "path": "./tsconfig.app.json" }     // Reference frontend config
+  ]
 }

@@ -3,4 +3,40 @@
 @tailwind components;
 @tailwind utilities;
 
-/* If you see "Unknown at rule @tailwind", make sure your build tool is running PostCSS with Tailwind CSS plugin. */
+@layer base {
+    .leaflet-tile{
+        border: none !important;
+        outline: none !important;
+    }
+    .leaflet-tile {
+        position: absolute;
+        margin: -1px !important;
+        background: none !important;
+    }
+}
+
+body {
+  font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+  background-color: #f0f2f5;
+}
+
+
+.bg-[#1e1e2f] {
+  background-color: #1a1a2e;
+}
+
+
+.map-container {
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+
+.nasa-control {
+  background-color: rgba(255, 255, 255, 0.9);
+  border: 1px solid #cbd5e0;
+  border-radius: 4px;
+  padding: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}

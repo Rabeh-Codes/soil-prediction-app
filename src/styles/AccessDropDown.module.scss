@@ -1,0 +1,124 @@
+
+
+.access-dropdown {
+ position: absolute;
+ top: 4%;
+
+ left: 0;
+ right: 0;
+ width: 100vw;
+ height: 35vh;
+ display: flex;
+
+ background-color: #0b0c10;
+ color: white;
+ z-index: 100;
+ justify-content: space-between;
+ padding: 2rem;
+ box-sizing: border-box;
+}
+.access-title {
+  color: #ffff;
+  font-size: 1.4rem;
+  margin-bottom:0.75rem;
+}
+
+.access-description {
+  color: #ddd;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.access-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.1rem;
+}
+
+.access-link {
+  color: white;
+  background: transparent;
+  font-size: 0.95rem;
+  padding: 0.4rem 0.8rem;
+  border: 1px solid transparent;
+  border-left: 2px solid #555;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background 0.2s ease;
+}
+
+.access-link:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-left: 2px solid #ffcb05;
+  color: #ffcb05;
+}
+
+
+.access-link:focus {
+  outline: 2px dashed #0b3d91;
+  outline-offset: 2px;
+}
+
+.arrow {
+  transition: transform 0.2s ease;
+}
+
+.access-link:hover .arrow {
+  transform: translateX(4px);
+  color: #ffcb05;
+}
+
+.access-image {
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  max-width: 100%;
+  height: auto;
+}
+.access-left{
+  flex: 1;
+
+}
+.access-center{
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+
+}
+.access-right{
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+
+.access-caption {
+  text-align: center;
+  margin-top: 0.5rem;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 900px) {
+  .access-dropdown {
+    grid-template-columns: 1fr;
+  }
+
+  .access-right {
+    order: -1;
+  }
+
+  .access-title {
+    font-size: 1.2rem;
+  }
+
+  .access-link {
+    font-size: 0.95rem;
+    padding: 0.6rem 0.8rem;
+  }
+}
