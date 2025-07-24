@@ -45,7 +45,7 @@ const MapView: FC<MapViewProps> = ({ selectedOption, onMapClick }) => {
         zoomSnap: 0.5,
         zoomDelta: 0.5,
       });
-      const arcGisLayer = L.tileLayer(
+       L.tileLayer(
         'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',
         {
           attribution: 'Tiles © Esri',

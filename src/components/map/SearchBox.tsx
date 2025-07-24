@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { FaSearch } from 'react-icons/fa';
 import { useMap } from '@/components/map/MapContext';
-import L from 'leaflet';
+
 
 interface SearchBoxProps {
   onLocationSelect?: (lat: number, lng: number) => void;
