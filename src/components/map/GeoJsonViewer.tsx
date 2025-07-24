@@ -38,10 +38,10 @@ const GeoJsonViewer = () => {
 
         // Create new layer with proper typing
         const layer = L.geoJSON(json, {
-          pointToLayer: (feature, latlng) => {
+          pointToLayer: (_feature, latlng) => {
             return L.circleMarker(latlng, { radius: 5 });
           },
-          style: (feature) => {
+          style: () => {
             return { color: '#3388ff', weight: 2 };
           }
         });

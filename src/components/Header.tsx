@@ -99,7 +99,11 @@ const Header = ({ onMenuClick, accessOpen, setAccessOpen, showMenuButton = false
 
         {/* ===== Right Actions Section ===== */}
         <div className={styles['actions']}>
-          <form className={styles['searchForm']} onSubmit={handleSearch}>
+          <form 
+              className={styles['searchForm']} onSubmit={handleSearch}
+              
+              onMouseEnter={() => setSearchOpen(true)}
+              onMouseLeave={() => setSearchOpen}>
             <input
               type="text"
               placeholder="Search datasets..."
@@ -109,6 +113,11 @@ const Header = ({ onMenuClick, accessOpen, setAccessOpen, showMenuButton = false
               ref={searchRef}
             />
             <button type="submit" className={styles['searchButton']}>🔍</button>
+            {searchOpen && (
+              <div className={styles['searchDropdown']}>
+                 <p>Search content..</p>
+              </div>
+            )}
           </form>
 
           {showMenuButton && (

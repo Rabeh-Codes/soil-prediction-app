@@ -1,11 +1,11 @@
 /// <reference types="vite/client" />
 /// <reference types="vite-plugin-inspect/client" />
 /// <reference types="rollup-plugin-visualizer" />
-/// <reference types="vitest" />
+import 'vitest/globals';
 
 declare module 'rollup-plugin-visualizer' {
   import { Plugin } from 'vite';
-  export function visualizer(options?: any): Plugin;
+  export function visualizer(options?: Record<string, unknown>): Plugin;
 }
 interface ImportMetaEnv {
   readonly VITE_NASA_API_KEY: string;

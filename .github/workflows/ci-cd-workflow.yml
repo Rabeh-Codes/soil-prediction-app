@@ -33,6 +33,8 @@ jobs:
 
       - name: Install Dependencies
         run: npm ci --prefer-offline --legacy-peer-deps
+      - name: Verify ESLint installed
+        run: npx eslint --version
 
       - name: Run Linters and Formatter
         run: |

@@ -1,4 +1,4 @@
-// src/context/MapContext.tsx
+/* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useEffect, useRef, useState, type ReactNode, type MutableRefObject } from 'react';
 import L from 'leaflet';
 
