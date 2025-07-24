@@ -4,7 +4,7 @@ import { useMap } from '@/components/map/MapContext';
 import 'leaflet-draw/dist/leaflet.draw.css';
 import L from 'leaflet';
 import 'leaflet-draw';
-
+import type { LeafletEvent } from 'leaflet';
 const DrawingTools = () => {
   const map = useMap();
   const drawnItemsRef = useRef<L.FeatureGroup | null>(null);
@@ -36,10 +36,10 @@ const DrawingTools = () => {
     map.addControl(drawControlRef.current);
 
     
-    const handleDrawCreated = (e: any) => {
-      const layer = e.layer as L.Layer;
-      if (drawnItemsRef.current) {
-        drawnItemsRef.current.addLayer(layer);
+    const handleDrawCreated = (e: LeafletEvent & { layer: L.Layer }) => {
+  const layer = e.layer;
+  if (drawnItemsRef.current) {
+    drawnItemsRef.current.addLayer(layer);
       }
     };
 

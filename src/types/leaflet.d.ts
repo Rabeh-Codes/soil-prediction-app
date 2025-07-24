@@ -1,28 +1,26 @@
-import * as L from 'leaflet';
+import 'leaflet';
+
 declare module 'leaflet' {
   interface Control {
     setPosition(position: string): this;
   }
+
   namespace GridLayer {
     interface GridLayer {
-      _initTile(tile:
-        HTMLElement
-      ): void;
+      _initTile(tile: HTMLElement): void;
     }
   }
+
   interface GridLayer {
     _initTile(tile: HTMLElement): void;
   }
+
   namespace control {
-    interface Scale extends Control {}
+    function Scale(options?: ScaleOptions):Control.Scale;
   }
-  namespace control {
-    function scale(options?: ScaleOptions): Control.Scale;
-  }
-  function tileLayer(urlTemplate: string, options?:TileLayerOptions):TileLayer;
-  interface control {
-    setPosition(position:ControlPosition): ThisParameterType;
-  }
+
+  function tileLayer(urlTemplate: string, options?: TileLayerOptions): TileLayer;
+
   interface ScaleOptions {
     position?: ControlPosition;
     maxWidth?: number;

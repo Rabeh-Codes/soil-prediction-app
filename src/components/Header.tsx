@@ -39,7 +39,7 @@ const Header = ({ onMenuClick, accessOpen, setAccessOpen, showMenuButton = false
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
+  }, [setAccessOpen]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
